@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lykke.Common.MsSql
 {
-    public static class PostgresBootstrapExtension
+    public static class MsSqlBootstrapExtension
     {
         public static void RegisterMsSql<T>(this ContainerBuilder builder, Func<T> contextCreator) where T: MsSqlContext
         {
