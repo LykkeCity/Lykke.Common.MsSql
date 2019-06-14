@@ -90,9 +90,6 @@ namespace Lykke.Common.MsSql
         
         protected sealed override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (_isForMocks)
-                return;
-            
             modelBuilder.HasDefaultSchema(_schema);
 
             OnLykkeModelCreating(modelBuilder);
