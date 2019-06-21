@@ -54,6 +54,15 @@ namespace Lykke.Common.MsSql
             _isForMocks = false;
         }
 
+        /// <summary>
+        /// Constructor used to customize db context options 
+        /// </summary>
+        /// <param name="options">The database context options</param>
+        public MsSqlContext(DbContextOptions options) : base(options)
+        {
+            _isForMocks = true;
+        }
+
         protected abstract void OnLykkeConfiguring(DbContextOptionsBuilder optionsBuilder);
         
         protected sealed override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
