@@ -15,7 +15,7 @@ namespace Lykke.Common.MsSql
 
         private readonly bool _isForMocks;
 
-        private readonly int _commandTimeoutSeconds;
+        private readonly int? _commandTimeoutSeconds;
 
         private const int DefaultCommandTimeout = 30;
         
@@ -100,7 +100,7 @@ namespace Lykke.Common.MsSql
             optionsBuilder
                 .UseSqlServer(_connectionString, x => x
                     .MigrationsHistoryTable(HistoryRepository.DefaultTableName, _schema)
-                    .CommandTimeout(_commandTimeoutSeconds))
+                    .CommandTimeout(_commandTimeoutSeconds ?? DefaultCommandTimeout))
                 .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
             OnLykkeConfiguring(optionsBuilder);
