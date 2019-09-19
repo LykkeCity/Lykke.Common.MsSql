@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
+using Falcon.Numerics;
 using Lykke.Common.MsSql.Attributes;
 using Lykke.Common.MsSql.Converters;
-using Lykke.Numerics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -123,7 +123,7 @@ namespace Lykke.Common.MsSql
                 var properties = entityType
                     .ClrType
                     .GetProperties()
-                    .Where(p => p.PropertyType == typeof(Money));
+                    .Where(p => p.PropertyType == typeof(Money18));
 
                 foreach (var property in properties)
                 {
@@ -132,14 +132,14 @@ namespace Lykke.Common.MsSql
                         modelBuilder
                             .Entity(entityType.Name)
                             .Property(property.Name)
-                            .HasConversion(MoneyPaddedConverter.Instance);
+                            .HasConversion(Money18PaddedConverter.Instance);
                     }
                     else
                     {
                         modelBuilder
                             .Entity(entityType.Name)
                             .Property(property.Name)
-                            .HasConversion(MoneyConverter.Instance);
+                            .HasConversion(Money18Converter.Instance);
                     }
                 }
             }

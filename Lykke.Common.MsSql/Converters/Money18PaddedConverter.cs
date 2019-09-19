@@ -1,19 +1,19 @@
 using System;
-using Lykke.Numerics;
+using Falcon.Numerics;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Lykke.Common.MsSql.Converters
 {
-    public class MoneyPaddedConverter : ValueConverter<Money, string>
+    public class Money18PaddedConverter : ValueConverter<Money18, string>
     {
-        public static MoneyPaddedConverter Instance = new MoneyPaddedConverter();
+        public static Money18PaddedConverter Instance = new Money18PaddedConverter();
 
-        private MoneyPaddedConverter()
-            : base(v => ToPaddedString(v), v => ToMoney(v))
+        private Money18PaddedConverter()
+            : base(v => ToPaddedString(v), v => ToMoney18(v))
         {
         }
 
-        private static string ToPaddedString(Money money)
+        private static string ToPaddedString(Money18 money)
         {
             var padFromLeft = 20;
             var padFromRight = 18;
@@ -44,9 +44,9 @@ namespace Lykke.Common.MsSql.Converters
             return s;
         }
 
-        private static Money ToMoney(string str)
+        private static Money18 ToMoney18(string str)
         {
-            return Money.Parse(str);
+            return Money18.Parse(str);
         }
     }
 }
