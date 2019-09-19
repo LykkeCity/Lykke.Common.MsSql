@@ -1,4 +1,8 @@
 using System;
+using System.Linq;
+using Lykke.Common.MsSql.Attributes;
+using Lykke.Common.MsSql.Converters;
+using Lykke.Numerics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -113,6 +117,32 @@ namespace Lykke.Common.MsSql
         protected sealed override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema(_schema);
+            
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entityType
+                    .ClrType
+                    .GetProperties()
+                    .Where(p => p.PropertyType == typeof(Money));
+
+                foreach (var property in properties)
+                {
+                    if (Attribute.IsDefined(property, typeof(Padding)))
+                    {
+                        modelBuilder
+                            .Entity(entityType.Name)
+                            .Property(property.Name)
+                            .HasConversion(MoneyPaddedConverter.Instance);
+                    }
+                    else
+                    {
+                        modelBuilder
+                            .Entity(entityType.Name)
+                            .Property(property.Name)
+                            .HasConversion(MoneyConverter.Instance);
+                    }
+                }
+            }
 
             OnLykkeModelCreating(modelBuilder);
             
