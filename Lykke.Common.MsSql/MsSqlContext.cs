@@ -120,12 +120,12 @@ namespace Lykke.Common.MsSql
             
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                var properties = entityType
+                var money18Properties = entityType
                     .ClrType
                     .GetProperties()
                     .Where(p => p.PropertyType == typeof(Money18));
 
-                foreach (var property in properties)
+                foreach (var property in money18Properties)
                 {
                     if (Attribute.IsDefined(property, typeof(Padding)))
                     {
@@ -140,6 +140,29 @@ namespace Lykke.Common.MsSql
                             .Entity(entityType.Name)
                             .Property(property.Name)
                             .HasConversion(Money18Converter.Instance);
+                    }
+                }
+                
+                var nullableMoney18Properties = entityType
+                    .ClrType
+                    .GetProperties()
+                    .Where(p => p.PropertyType == typeof(Money18?));
+
+                foreach (var property in nullableMoney18Properties)
+                {
+                    if (Attribute.IsDefined(property, typeof(Padding)))
+                    {
+                        modelBuilder
+                            .Entity(entityType.Name)
+                            .Property(property.Name)
+                            .HasConversion(NullableMoney18PaddedConverter.Instance);
+                    }
+                    else
+                    {
+                        modelBuilder
+                            .Entity(entityType.Name)
+                            .Property(property.Name)
+                            .HasConversion(NullableMoney18Converter.Instance);
                     }
                 }
             }
