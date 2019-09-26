@@ -5,7 +5,7 @@ namespace Lykke.Common.MsSql.Converters
 {
     public class NullableMoney18Converter : ValueConverter<Money18?, string>
     {
-        public static NullableMoney18Converter Instance = new NullableMoney18Converter();
+        public static readonly NullableMoney18Converter Instance = new NullableMoney18Converter();
 
         private NullableMoney18Converter()
             : base(v => ToString(v), v => ToNullableMoney18(v))
