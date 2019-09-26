@@ -6,7 +6,7 @@ namespace Lykke.Common.MsSql.Converters
 {
     public class NullableMoney18PaddedConverter : ValueConverter<Money18?, string>
     {
-        public static NullableMoney18PaddedConverter Instance = new NullableMoney18PaddedConverter();
+        public static readonly NullableMoney18PaddedConverter Instance = new NullableMoney18PaddedConverter();
 
         private NullableMoney18PaddedConverter()
             : base(v => ToPaddedString(v), v => ToNullableMoney18(v))
@@ -17,11 +17,11 @@ namespace Lykke.Common.MsSql.Converters
         {
             if (!money.HasValue)
                 return null;
-            
+
             var padFromLeft = 20;
             var padFromRight = 18;
             var delimiter = ".";
-            
+
             var s = money.ToString();
 
             var delimiterInString = s.Contains(".") ? "." : "";
@@ -41,7 +41,7 @@ namespace Lykke.Common.MsSql.Converters
             }
 
             var delimiterIndexAfterRightPad = s.IndexOf(delimiter, StringComparison.InvariantCulture);
-            
+
             s = new string('0', padFromLeft - delimiterIndexAfterRightPad) + s;
 
             return s;

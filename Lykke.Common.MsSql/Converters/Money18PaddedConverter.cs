@@ -6,7 +6,7 @@ namespace Lykke.Common.MsSql.Converters
 {
     public class Money18PaddedConverter : ValueConverter<Money18, string>
     {
-        public static Money18PaddedConverter Instance = new Money18PaddedConverter();
+        public static readonly Money18PaddedConverter Instance = new Money18PaddedConverter();
 
         private Money18PaddedConverter()
             : base(v => ToPaddedString(v), v => ToMoney18(v))
@@ -18,7 +18,7 @@ namespace Lykke.Common.MsSql.Converters
             var padFromLeft = 20;
             var padFromRight = 18;
             var delimiter = ".";
-            
+
             var s = money.ToString();
 
             var delimiterInString = s.Contains(".") ? "." : "";
@@ -38,7 +38,7 @@ namespace Lykke.Common.MsSql.Converters
             }
 
             var delimiterIndexAfterRightPad = s.IndexOf(delimiter, StringComparison.InvariantCulture);
-            
+
             s = new string('0', padFromLeft - delimiterIndexAfterRightPad) + s;
 
             return s;
