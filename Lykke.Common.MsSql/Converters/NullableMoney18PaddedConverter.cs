@@ -24,17 +24,15 @@ namespace Lykke.Common.MsSql.Converters
 
             var s = money.ToString();
 
-            var delimiterInString = s.Contains(".") ? "." : "";
+            var delimiterIndex = s.IndexOf(".", StringComparison.InvariantCulture);
 
-            if (delimiterInString == "")
+            if (delimiterIndex == -1)
             {
                 s += ".";
                 s += new string('0', padFromRight);
             }
             else
             {
-                var delimiterIndex = s.IndexOf(delimiterInString, StringComparison.InvariantCulture);
-
                 var charsAfterDelimiter = s.Length - delimiterIndex;
 
                 s += new string('0', padFromRight - charsAfterDelimiter + 1);

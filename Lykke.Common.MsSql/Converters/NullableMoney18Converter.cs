@@ -14,7 +14,7 @@ namespace Lykke.Common.MsSql.Converters
 
         private static string ToString(Money18? money)
         {
-            return money?.ToString().TrimEnd('0');
+            return money?.ToString();
         }
 
         private static Money18? ToNullableMoney18(string str)
