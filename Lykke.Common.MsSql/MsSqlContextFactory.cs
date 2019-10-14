@@ -4,11 +4,17 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Transactions;
 using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lykke.Common.MsSql
 {
+    /// <summary>
+    /// Factory for db context creation.
+    /// </summary>
+    /// <typeparam name="T">DB context type.</typeparam>
     [PublicAPI]
     public class MsSqlContextFactory<T> : IDbContextFactory<T>, ITransactionRunner
+        where T : DbContext
     {
         private readonly string _dbConnString;
         private readonly Func<T> _contextCreator;
@@ -41,7 +47,7 @@ namespace Lykke.Common.MsSql
         public T CreateDataContext(TransactionContext transactionContext)
         {
             if (_dbConnectionCreator == null)
-                throw new InvalidOperationException("C-tor for db context using db connection is not defined. Old MsSqlContextFactory c-tor was used.");
+                return CreateDataContext();
 
             return _dbConnectionCreator(transactionContext.DbConnection);
         }
@@ -54,7 +60,7 @@ namespace Lykke.Common.MsSql
                 {
                     connection.Open();
 
-                    var txContext = new TransactionContext { DbConnection = connection };
+                    var txContext = new TransactionContext(connection);
 
                     var result = await func(txContext);
 
@@ -73,7 +79,7 @@ namespace Lykke.Common.MsSql
                 {
                     connection.Open();
 
-                    var txContext = new TransactionContext { DbConnection = connection };
+                    var txContext = new TransactionContext(connection);
 
                     await action(txContext);
 
