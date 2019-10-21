@@ -106,23 +106,27 @@ namespace Lykke.Common.MsSql
                 optionsBuilder.UseLoggerFactory(new LoggerFactory(new[] {new ConsoleLoggerProvider((_, __) => true, true)}));
             }
 
-            // Manual connection string entry for migrations.
-            while (string.IsNullOrEmpty(_connectionString))
+            if (_dbConnection == null)
             {
-                Console.Write("Enter connection string: ");
+                // Manual connection string entry for migrations.
+                while (string.IsNullOrEmpty(_connectionString))
+                {
+                    Console.Write("Enter connection string: ");
 
-                _connectionString = Console.ReadLine();
-            }
-
-            optionsBuilder = _dbConnection != null
-                ? optionsBuilder
-                    .UseSqlServer(_dbConnection, x => x
-                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, _schema)
-                        .CommandTimeout(_commandTimeoutSeconds ?? DefaultCommandTimeout))
-                : optionsBuilder
+                    _connectionString = Console.ReadLine();
+                }
+                optionsBuilder = optionsBuilder
                     .UseSqlServer(_connectionString, x => x
                         .MigrationsHistoryTable(HistoryRepository.DefaultTableName, _schema)
                         .CommandTimeout(_commandTimeoutSeconds ?? DefaultCommandTimeout));
+            }
+            else
+            {
+                optionsBuilder = optionsBuilder
+                    .UseSqlServer(_dbConnection, x => x
+                        .MigrationsHistoryTable(HistoryRepository.DefaultTableName, _schema)
+                        .CommandTimeout(_commandTimeoutSeconds ?? DefaultCommandTimeout));
+            }
 
             optionsBuilder.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
