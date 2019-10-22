@@ -46,7 +46,7 @@ namespace Lykke.Common.MsSql
 
         public T CreateDataContext(TransactionContext transactionContext)
         {
-            if (_dbConnectionCreator == null)
+            if (_dbConnectionCreator == null || transactionContext?.DbConnection == null)
                 return CreateDataContext();
 
             return _dbConnectionCreator(transactionContext.DbConnection);
