@@ -21,10 +21,15 @@ namespace Lykke.Common.MsSql
         private readonly Func<string, T> _connStringCreator;
         private readonly Func<DbConnection, T> _dbConnectionCreator;
 
-        [Obsolete("Use c-tor with dbConnString parameter")]
+        [Obsolete("Use other c-tors")]
         public MsSqlContextFactory(Func<T> contextCreator)
         {
             _contextCreator = contextCreator;
+        }
+
+        public MsSqlContextFactory(Func<DbContextOptions, T> contextCreator, DbContextOptions contextOptions)
+        {
+            _contextCreator = () => contextCreator(contextOptions);
         }
 
         public MsSqlContextFactory(
