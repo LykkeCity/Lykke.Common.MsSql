@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data.Common;
 using System.Linq;
 using Falcon.Numerics;
@@ -103,7 +103,15 @@ namespace Lykke.Common.MsSql
 
             if (IsTraceEnabled)
             {
-                optionsBuilder.UseLoggerFactory(new LoggerFactory(new[] {new ConsoleLoggerProvider((_, __) => true, true)}));
+                var loggerFactory =
+#if (NETCOREAPP3_0 || NETCOREAPP3_1)
+                LoggerFactory.Create(builder => { builder.AddConsole(); });
+#elif NETSTANDARD2_0
+                new LoggerFactory(new[] { new ConsoleLoggerProvider((_, __) => true, true) });
+#else
+#error unknown target framework
+#endif
+                optionsBuilder.UseLoggerFactory(loggerFactory);
             }
 
             if (_dbConnection == null)

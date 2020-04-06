@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System.Transactions;
 using JetBrains.Annotations;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lykke.Common.MsSql
